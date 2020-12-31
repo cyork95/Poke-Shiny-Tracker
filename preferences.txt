@@ -1,8 +1,8 @@
 0
-snover
-0
+crobat
 1
 0
 0
-Chance: 1/1365
+0
+Chance: 1/4096
 B(n, p): 0.0%

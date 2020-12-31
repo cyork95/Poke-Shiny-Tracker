@@ -58,7 +58,7 @@ shiny_charm_box = QComboBox()
 lure_box = QComboBox()
 game_version_box = QComboBox()
 
-method_box.addItems(["Random Encounters", "Dynamax Battles", "Lure", "Masuda Method", "PokeRadar Chaining",
+method_box.addItems(["Random Encounters", "Egg Hatching", "Dynamax Battles", "Lure", "Masuda Method", "PokeRadar Chaining",
                      "Consecutive Fishing", "Catch Combo"])
 
 shiny_charm_box.addItems(["No", "Yes"])
@@ -92,11 +92,11 @@ with open("preferences.txt", "r") as f:
 
 
 def save_clicked():
-    if str(pokemon_box.text()) in pokedex:
+    if str(pokemon_box.text()).lower() in pokedex:
         with open("preferences.txt", "w") as file:
             file.write(str(encounters_box.text()))
             file.write("\n")
-            file.write(str(pokemon_box.text()))
+            file.write(str(pokemon_box.text()).lower())
             file.write("\n")
             file.write(str(method_box.currentIndex()))
             file.write("\n")
@@ -322,12 +322,40 @@ previous_catch_label = QLabel()
 
 def caught_clicked():
     dummy_file = "catch_history.bak"
-    with open("catch_history.txt", "r+") as curr_file, open(dummy_file, 'w') as bak_file:
-        bak_file.write("Caught " + str(pokemon_box.text()).capitalize() + " in " + str(count_increment_label.text()) +
-                       " tries with " + str(shiny_chance_label.text()) + " in " + str(game_version_box.currentText()) +
-                       " with the " + str(method_box.currentText()) + " method.\n")
-        for prev_catches in curr_file:
-            bak_file.write(prev_catches)
+    if method_box.currentText() == "Egg Hatching":
+        if count_increment_label.text() == "1":
+            with open("catch_history.txt", "r+") as curr_file, open(dummy_file, 'w') as bak_file:
+                bak_file.write(
+                    "Hatched " + str(pokemon_box.text()).capitalize() + " in " + str(count_increment_label.text()) +
+                    " try with " + str(shiny_chance_label.text()) + " in " + str(game_version_box.currentText()) +
+                    " with the " + str(method_box.currentText()) + " method.\n")
+                for prev_catches in curr_file:
+                    bak_file.write(prev_catches)
+        else:
+            with open("catch_history.txt", "r+") as curr_file, open(dummy_file, 'w') as bak_file:
+                bak_file.write(
+                    "Hatched " + str(pokemon_box.text()).capitalize() + " in " + str(count_increment_label.text()) +
+                    " tries with " + str(shiny_chance_label.text()) + " in " + str(game_version_box.currentText()) +
+                    " with the " + str(method_box.currentText()) + " method.\n")
+                for prev_catches in curr_file:
+                    bak_file.write(prev_catches)
+    else:
+        if count_increment_label.text() == "1":
+            with open("catch_history.txt", "r+") as curr_file, open(dummy_file, 'w') as bak_file:
+                bak_file.write(
+                    "Caught " + str(pokemon_box.text()).capitalize() + " in " + str(count_increment_label.text()) +
+                    " try with " + str(shiny_chance_label.text()) + " in " + str(game_version_box.currentText()) +
+                    " with the " + str(method_box.currentText()) + " method.\n")
+                for prev_catches in curr_file:
+                    bak_file.write(prev_catches)
+        else:
+            with open("catch_history.txt", "r+") as curr_file, open(dummy_file, 'w') as bak_file:
+                bak_file.write(
+                    "Caught " + str(pokemon_box.text()).capitalize() + " in " + str(count_increment_label.text()) +
+                    " tries with " + str(shiny_chance_label.text()) + " in " + str(game_version_box.currentText()) +
+                    " with the " + str(method_box.currentText()) + " method.\n")
+                for prev_catches in curr_file:
+                    bak_file.write(prev_catches)
     curr_file.close()
     bak_file.close()
     os.remove("catch_history.txt")
@@ -344,7 +372,7 @@ def caught_clicked():
     previous_catch_label.setText(catch_history_text)
 
 
-caught_button = QPushButton("Caught!")
+caught_button = QPushButton("Shiny!")
 caught_button.clicked.connect(caught_clicked)
 
 
@@ -433,13 +461,11 @@ window.show()
 
 
 def exit_process():
-    with open("preferences.txt", "r") as file:
-        pref_lines = file.readlines()
     with open("preferences.txt", "w") as file:
         file.write(str(count_increment_label.text()))
         file.write("\n")
-        if str(pokemon_box.text()) in pokedex:
-            file.write(str(pokemon_box.text()))
+        if str(pokemon_box.text()).lower() in pokedex:
+            file.write(str(pokemon_box.text()).lower())
             file.write("\n")
         else:
             file.write("snover")
