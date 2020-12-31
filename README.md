@@ -1,2 +1,2 @@
-# Pokemon Shiny Hunting App
+# Poke Shiny Tracker
  
