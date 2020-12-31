@@ -3,8 +3,6 @@ from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5 import QtCore, Qt
 import requests
 import pathlib
-
-from PyQt5.uic.properties import QtWidgets
 from scipy.stats import binom
 
 shiny_chance = 1 / 4096
@@ -143,6 +141,19 @@ def encounters_changed():
     count_increment_label.setText(str(encounters_box.text()))
 
 
+def normal_round(num, ndigits=0):
+    """
+    Rounds a float to the specified number of decimal places.
+    num: the value to round
+    ndigits: the number of digits to round to
+    """
+    if ndigits == 0:
+        return int(num + 0.5)
+    else:
+        digit_value = 10 ** ndigits
+        return int(num * digit_value + 0.5) / digit_value
+
+
 def shiny_chance():
     if game_version_box.currentText() == "SW/SH":
         if method_box.currentText() == "Dynamax Battles":
@@ -155,119 +166,123 @@ def shiny_chance():
         else:
             if shiny_charm_box.currentText() == "No":
                 if int(count_increment_label.text()) < 50:
-                    shiny_chance_label.setText("Shiny Chance: 1/4096")
+                    shiny_chance_label.setText("Chance: 1/4096")
                     return 1 / 4096
                 elif 50 <= int(count_increment_label.text()) < 100:
-                    shiny_chance_label.setText("Shiny Chance: 1/2048")
+                    shiny_chance_label.setText("Chance: 1/2048")
                     return 1 / 2048
                 elif 100 <= int(count_increment_label.text()) < 200:
-                    shiny_chance_label.setText("Shiny Chance: 1/1365")
+                    shiny_chance_label.setText("Chance: 1/1365")
                     return 1 / 1365.333
                 elif 200 <= int(count_increment_label.text()) < 300:
-                    shiny_chance_label.setText("Shiny Chance: 1/1024")
+                    shiny_chance_label.setText("Chance: 1/1024")
                     return 1 / 1024
                 elif 300 <= int(count_increment_label.text()) < 500:
-                    shiny_chance_label.setText("Shiny Chance: 1/819")
+                    shiny_chance_label.setText("Chance: 1/819")
                     return 1 / 819.2
                 else:
-                    shiny_chance_label.setText("Shiny Chance: 1/683")
+                    shiny_chance_label.setText("Chance: 1/683")
                     return 1 / 682.6667
             else:
                 if int(count_increment_label.text()) < 50:
-                    shiny_chance_label.setText("Shiny Chance: 1/1365")
+                    shiny_chance_label.setText("Chance: 1/1365")
                     return 1 / 1365.33
                 elif 50 <= int(count_increment_label.text()) < 100:
-                    shiny_chance_label.setText("Shiny Chance: 1/1024")
+                    shiny_chance_label.setText("Chance: 1/1024")
                     return 1 / 1024
                 elif 100 <= int(count_increment_label.text()) < 200:
-                    shiny_chance_label.setText("Shiny Chance: 1/819")
+                    shiny_chance_label.setText("Chance: 1/819")
                     return 1 / 819.2
                 elif 200 <= int(count_increment_label.text()) < 300:
-                    shiny_chance_label.setText("Shiny Chance: 1/683")
+                    shiny_chance_label.setText("Chance: 1/683")
                     return 1 / 682.6667
                 elif 300 <= int(count_increment_label.text()) < 500:
-                    shiny_chance_label.setText("Shiny Chance: 1/585")
+                    shiny_chance_label.setText("Chance: 1/585")
                     return 1 / 585.1429
                 else:
-                    shiny_chance_label.setText("Shiny Chance: 1/512")
+                    shiny_chance_label.setText("Chance: 1/512")
                     return 1 / 512
     elif game_version_box.currentText() == "Let's Go":
         if lure_box.currentText() == "Yes":
             if shiny_charm_box.currentText() == "No":
-                shiny_chance_label.setText("Shiny Chance: 1/2048")
+                shiny_chance_label.setText("Chance: 1/2048")
                 return 1 / 2048
             else:
-                shiny_chance_label.setText("Shiny Chance: 1/1024")
+                shiny_chance_label.setText("Chance: 1/1024")
                 return 1 / 1024
         elif method_box.currentText() == "Catch Combos":
             if lure_box.currentText() == "Yes":
                 if shiny_charm_box.currentText() == "Yes":
                     if int(count_increment_label.text()) < 11:
-                        shiny_chance_label.setText("Shiny Chance: 1/1024")
+                        shiny_chance_label.setText("Chance: 1/1024")
                         return 1 / 1024
                     elif 11 <= int(count_increment_label.text()) < 21:
-                        shiny_chance_label.setText("Shiny Chance: 1/585")
+                        shiny_chance_label.setText("Chance: 1/585")
                         return 1 / 585.1429
                     elif 21 <= int(count_increment_label.text()) < 31:
-                        shiny_chance_label.setText("Shiny Chance: 1/372")
+                        shiny_chance_label.setText("Chance: 1/372")
                         return 1 / 372.36
                     else:
-                        shiny_chance_label.setText("Shiny Chance: 1/273")
+                        shiny_chance_label.setText("Chance: 1/273")
                         return 1 / 273.07
                 else:
                     if int(count_increment_label.text()) < 11:
-                        shiny_chance_label.setText("Shiny Chance: 1/2048")
+                        shiny_chance_label.setText("Chance: 1/2048")
                         return 1 / 2048
                     elif 11 <= int(count_increment_label.text()) < 21:
-                        shiny_chance_label.setText("Shiny Chance: 1/819")
+                        shiny_chance_label.setText("Chance: 1/819")
                         return 1 / 819.2
                     elif 21 <= int(count_increment_label.text()) < 31:
-                        shiny_chance_label.setText("Shiny Chance: 1/455")
+                        shiny_chance_label.setText("Chance: 1/455")
                         return 1 / 455.1
                     else:
-                        shiny_chance_label.setText("Shiny Chance: 1/315")
+                        shiny_chance_label.setText("Chance: 1/315")
                         return 1 / 315.08
             else:
                 if shiny_charm_box.currentText() == "Yes":
                     if int(count_increment_label.text()) < 11:
-                        shiny_chance_label.setText("Shiny Chance: 1/1365")
+                        shiny_chance_label.setText("Chance: 1/1365")
                         return 1 / 1365.3
                     elif 11 <= int(count_increment_label.text()) < 21:
-                        shiny_chance_label.setText("Shiny Chance: 1/683")
+                        shiny_chance_label.setText("Chance: 1/683")
                         return 1 / 682.6
                     elif 21 <= int(count_increment_label.text()) < 31:
-                        shiny_chance_label.setText("Shiny Chance: 1/409")
+                        shiny_chance_label.setText("Chance: 1/409")
                         return 1 / 409.6
                     else:
-                        shiny_chance_label.setText("Shiny Chance: 1/293")
+                        shiny_chance_label.setText("Chance: 1/293")
                         return 1 / 292.57
                 else:
                     if int(count_increment_label.text()) < 11:
-                        shiny_chance_label.setText("Shiny Chance: 1/4096")
+                        shiny_chance_label.setText("Chance: 1/4096")
                         return 1 / 4096
                     elif 11 <= int(count_increment_label.text()) < 21:
-                        shiny_chance_label.setText("Shiny Chance: 1/1024")
+                        shiny_chance_label.setText("Chance: 1/1024")
                         return 1 / 1024
                     elif 21 <= int(count_increment_label.text()) < 31:
-                        shiny_chance_label.setText("Shiny Chance: 1/512")
+                        shiny_chance_label.setText("Chance: 1/512")
                         return 1 / 512
                     else:
-                        shiny_chance_label.setText("Shiny Chance: 1/341")
+                        shiny_chance_label.setText("Chance: 1/341")
                         return 1 / 341.3
         else:
             if shiny_charm_box.currentText() == "No":
-                shiny_chance_label.setText("Shiny Chance: 1/4096")
+                shiny_chance_label.setText("Chance: 1/4096")
                 return 1 / 4096
             else:
-                shiny_chance_label.setText("Shiny Chance: 1/1365")
+                shiny_chance_label.setText("Chance: 1/1365")
                 return 1 / 1365
 
 
 def binomial_distribution(chance):
     n = int(count_increment_label.text())
     k = chance
-    binomial_distribution_mass = binom.pmf(1, n, k)
-    binomial_distribution_label.setText("B(n, p): " + str(round(binomial_distribution_mass, 4)))
+    max_chance = 0.3682
+    if n * k >= 1:
+        binomial_distribution_mass = (max_chance - binom.pmf(1, n, k)) + max_chance
+    else:
+        binomial_distribution_mass = binom.pmf(1, n, k)
+    binomial_distribution_label.setText("B(n, p): " + str(round(100 * binomial_distribution_mass, 2)) + "%")
 
 
 def increase_clicked():
@@ -306,25 +321,23 @@ def counter_tab_UI():
     counter_layout = QGridLayout()
     mon_pixmap = QPixmap("./resources/shiny_pokemon_images/" + pokemon + ".png")
     mon_pixmap = mon_pixmap.scaled(128, 128, QtCore.Qt.KeepAspectRatio)
+    image_label.setAlignment(QtCore.Qt.AlignCenter)
     image_label.setPixmap(mon_pixmap)
     counter_layout.addWidget(image_label, 0, 1)
-    count_increment_label.setFont(QFont('Times', 20))
+    count_increment_label.setFont(QFont('Times', 16))
     count_increment_label.setAlignment(QtCore.Qt.AlignCenter)
     counter_layout.addWidget(count_increment_label, 1, 1)
-    counter_layout.addWidget(increase_button, 2, 0)
-    counter_layout.addWidget(reset_button, 2, 1)
-    counter_layout.addWidget(decrease_button, 2, 3)
+    shiny_chance_label.setFont(QFont('Times', 12))
+    shiny_chance_label.setAlignment(QtCore.Qt.AlignCenter)
+    counter_layout.addWidget(shiny_chance_label, 3, 1)
+    binomial_distribution_label.setFont(QFont('Times', 12))
+    binomial_distribution_label.setAlignment(QtCore.Qt.AlignCenter)
+    counter_layout.addWidget(binomial_distribution_label, 4, 1)
+    counter_layout.addWidget(increase_button, 5, 0)
+    counter_layout.addWidget(reset_button, 5, 1)
+    counter_layout.addWidget(decrease_button, 5, 2)
     counter_tab.setLayout(counter_layout)
     return counter_tab
-
-
-def stats_tab_UI():
-    stats_tab = QWidget()
-    stats_layout = QGridLayout()
-    stats_layout.addWidget(shiny_chance_label, 0, 0)
-    stats_layout.addWidget(binomial_distribution_label, 0, 1)
-    stats_tab.setLayout(stats_layout)
-    return stats_tab
 
 
 def settings_tab_UI():
@@ -346,7 +359,6 @@ layout = QGridLayout()
 
 tabs = QTabWidget()
 tabs.addTab(counter_tab_UI(), "Counter")
-tabs.addTab(stats_tab_UI(), "Statistics")
 tabs.addTab(settings_tab_UI(), "Settings")
 layout.addWidget(tabs)
 

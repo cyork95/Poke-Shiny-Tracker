@@ -1,8 +1,8 @@
-5
+224
 snover
 0
 1
 0
 0
-Shiny Chance: 1/1365
-B(n, p): 0.0037
+Chance: 1/683
+B(n, p): 23.66%
