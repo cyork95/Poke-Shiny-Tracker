@@ -2,7 +2,7 @@ import os
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap, QFont
-from PyQt5 import QtCore, Qt
+from PyQt5 import QtCore
 import requests
 import pathlib
 from scipy.stats import binom
