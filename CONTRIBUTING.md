@@ -1,0 +1,1 @@
+## Feel free to contribute anything you want, but please make sure to keep it on a seperate branch. If you want to merge with main, send email to yorkc36@gmail.com with details of what will be merged with main!
