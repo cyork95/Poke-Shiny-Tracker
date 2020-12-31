@@ -1,2 +1,0 @@
-shinyapp.exe filter=lfs diff=lfs merge=lfs -text
-0.2_POC_Test.zip filter=lfs diff=lfs merge=lfs -text
