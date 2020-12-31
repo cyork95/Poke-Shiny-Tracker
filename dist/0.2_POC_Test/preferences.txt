@@ -1,0 +1,8 @@
+300
+banette
+2
+0
+1
+1
+Shiny Chance: 1/2048
+B(n, p): 0.1266

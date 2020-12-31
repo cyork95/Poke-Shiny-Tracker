@@ -3,6 +3,8 @@ from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5 import QtCore, Qt
 import requests
 import pathlib
+
+from PyQt5.uic.properties import QtWidgets
 from scipy.stats import binom
 
 shiny_chance = 1 / 4096
@@ -89,34 +91,42 @@ with open("preferences.txt", "r") as f:
     get_pokemon_image(pokemon)
 
 
-# noinspection PyTypeChecker
 def save_clicked():
-    with open("preferences.txt", "w") as file:
-        file.write(str(encounters_box.text()))
-        file.write("\n")
-        file.write(str(pokemon_box.text()))
-        file.write("\n")
-        file.write(str(method_box.currentIndex()))
-        file.write("\n")
-        file.write(str(shiny_charm_box.currentIndex()))
-        file.write("\n")
-        file.write(str(lure_box.currentIndex()))
-        file.write("\n")
-        file.write(str(game_version_box.currentIndex()))
-        file.write("\n")
-        file.write(str(shiny_chance_label.text()))
-        file.write("\n")
-        file.write(str(binomial_distribution_label.text()))
+    if str(pokemon_box.text()) in pokedex:
+        with open("preferences.txt", "w") as file:
+            file.write(str(encounters_box.text()))
+            file.write("\n")
+            file.write(str(pokemon_box.text()))
+            file.write("\n")
+            file.write(str(method_box.currentIndex()))
+            file.write("\n")
+            file.write(str(shiny_charm_box.currentIndex()))
+            file.write("\n")
+            file.write(str(lure_box.currentIndex()))
+            file.write("\n")
+            file.write(str(game_version_box.currentIndex()))
+            file.write("\n")
+            file.write(str(shiny_chance_label.text()))
+            file.write("\n")
+            file.write(str(binomial_distribution_label.text()))
 
-    count_increment_label.setText(str(encounters_box.text()))
-    pokemon = pokemon_box.text().lower()
-    get_pokemon_image(pokemon)
-    mon_pixmap = QPixmap("./resources/shiny_pokemon_images/" + pokemon + ".png")
-    mon_pixmap = mon_pixmap.scaled(128, 128, QtCore.Qt.KeepAspectRatio)
-    image_label.setPixmap(mon_pixmap)
-    chance = shiny_chance()
-    binomial_distribution(chance)
-    window.setWindowTitle("Shiny Counter for: " + pokemon.capitalize())
+        count_increment_label.setText(str(encounters_box.text()))
+        pokemon = pokemon_box.text().lower()
+        get_pokemon_image(pokemon)
+        mon_pixmap = QPixmap("./resources/shiny_pokemon_images/" + pokemon + ".png")
+        mon_pixmap = mon_pixmap.scaled(128, 128, QtCore.Qt.KeepAspectRatio)
+        image_label.setPixmap(mon_pixmap)
+        chance = shiny_chance()
+        binomial_distribution(chance)
+        window.setWindowTitle("Shiny Counter for: " + pokemon.capitalize())
+    else:
+        error_dialog = QMessageBox()
+        error_dialog.setIcon(QMessageBox.Critical)
+        error_dialog.setText("Cannot find pokemon:")
+        error_dialog.setInformativeText('Ensure you have spelt the name correctly!\nRemember to specify regional forms '
+                                        '\nex. Farfetch\'d-Galar or Rattata-Alola!')
+        error_dialog.setWindowTitle("Cannot find pokemon!")
+        error_dialog.exec_()
 
 
 save_button = QPushButton()
@@ -362,8 +372,12 @@ def exit_process():
     with open("preferences.txt", "w") as file:
         file.write(str(count_increment_label.text()))
         file.write("\n")
-        file.write(str(pokemon_box.text()))
-        file.write("\n")
+        if str(pokemon_box.text()) in pokedex:
+            file.write(str(pokemon_box.text()))
+            file.write("\n")
+        else:
+            file.write("snover")
+            file.write("\n")
         file.write(str(method_box.currentIndex()))
         file.write("\n")
         file.write(str(shiny_charm_box.currentIndex()))

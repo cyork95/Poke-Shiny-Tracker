@@ -1,8 +1,8 @@
+5
+snover
 0
-banette
-2
 1
-1
-1
-Shiny Chance: 1/1024
-B(n, p): 0.0
+0
+0
+Shiny Chance: 1/1365
+B(n, p): 0.0037
