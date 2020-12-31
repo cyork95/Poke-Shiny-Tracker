@@ -1,3 +1,5 @@
+import os
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5 import QtCore, Qt
@@ -315,6 +317,36 @@ def reset_clicked():
 reset_button = QPushButton("Reset")
 reset_button.clicked.connect(reset_clicked)
 
+previous_catch_label = QLabel()
+
+
+def caught_clicked():
+    dummy_file = "catch_history.bak"
+    with open("catch_history.txt", "r+") as curr_file, open(dummy_file, 'w') as bak_file:
+        bak_file.write("Caught " + str(pokemon_box.text()).capitalize() + " in " + str(count_increment_label.text()) +
+                       " tries with " + str(shiny_chance_label.text()) + " in " + str(game_version_box.currentText()) +
+                       " with the " + str(method_box.currentText()) + " method.\n")
+        for prev_catches in curr_file:
+            bak_file.write(prev_catches)
+    curr_file.close()
+    bak_file.close()
+    os.remove("catch_history.txt")
+    os.rename(dummy_file, "catch_history.txt")
+    count_increment_label.setText(str((int(0))))
+    chance = shiny_chance()
+    binomial_distribution(chance)
+    catch_history_file = open('./catch_history.txt', 'r')
+    number_of_lines = 20
+    catch_history_text = ""
+    for i in range(number_of_lines):
+        catch_history_line = catch_history_file.readline()
+        catch_history_text = catch_history_text + catch_history_line
+    previous_catch_label.setText(catch_history_text)
+
+
+caught_button = QPushButton("Caught!")
+caught_button.clicked.connect(caught_clicked)
+
 
 def counter_tab_UI():
     counter_tab = QWidget()
@@ -336,8 +368,29 @@ def counter_tab_UI():
     counter_layout.addWidget(increase_button, 5, 0)
     counter_layout.addWidget(reset_button, 5, 1)
     counter_layout.addWidget(decrease_button, 5, 2)
+    counter_layout.addWidget(caught_button, 6, 1)
     counter_tab.setLayout(counter_layout)
     return counter_tab
+
+
+def catch_tab_UI():
+    catch_tab = QWidget()
+    catch_layout = QGridLayout()
+    previous_catch_text_label = QLabel()
+    previous_catch_text_label.setText("Previous 20 Shiny Encounters: ")
+    previous_catch_text_label.setFont(QFont('Times', 16))
+    catch_layout.addWidget(previous_catch_text_label, 0, 0)
+    catch_history_file = open('./catch_history.txt', 'r')
+    number_of_lines = 20
+    catch_history_text = ""
+    for i in range(number_of_lines):
+        line = catch_history_file.readline()
+        catch_history_text = catch_history_text + line
+    previous_catch_label.setFont(QFont('Times', 10))
+    previous_catch_label.setText(catch_history_text)
+    catch_layout.addWidget(previous_catch_label, 1, 0)
+    catch_tab.setLayout(catch_layout)
+    return catch_tab
 
 
 def settings_tab_UI():
@@ -359,6 +412,7 @@ layout = QGridLayout()
 
 tabs = QTabWidget()
 tabs.addTab(counter_tab_UI(), "Counter")
+tabs.addTab(catch_tab_UI(), "Catch History")
 tabs.addTab(settings_tab_UI(), "Settings")
 layout.addWidget(tabs)
 
